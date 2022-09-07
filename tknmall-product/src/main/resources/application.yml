@@ -1,30 +1,56 @@
-
+ipAddr: localhost
+vmIpAddr: 192.168.133.128
 server:
   port: 9011
 spring:
   application:
     name: tknmall-product
   datasource:
-    url: jdbc:mysql://localhost:3306/gulimall_pms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://${ipAddr}:3306/tknmall_pms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.133.128:8848
+        server-addr: ${vmIpAddr}:8848
+    sentinel:
+      transport:
+        dashboard: ${vmIpAddr}:8333
+        port: 8719
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 
+
+  redis:
+    host: ${vmIpAddr}
+    port: 6379
+#    password: linkekun
+
+  #   设置缓存类型
+  cache:
+    type: redis
+    #   设置存活时间
+    redis:
+      time-to-live: 3600000
+      #      如果指定了前缀就用我们指定的 如果没有就用缓存的名字作为前缀
+      #      key-prefix: CACHE_
+      #      是否缓存空值,解决缓存穿透问题
+      cache-null-values: true
+#    cache-names:
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
   global-config:
     db-config:
       id-type: auto
+      # 配置逻辑删除 1代表删除 0代表已删除
       logic-delete-value: 1
       logic-not-delete-value: 0
+    # configuration:
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 logging:
   level:
-    com.atguigu.gulimall: debug
+    name.tkn.tknmall.product: debug
 
