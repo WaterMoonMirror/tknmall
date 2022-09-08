@@ -7,11 +7,11 @@ import name.tkn.tknmall.product.entity.AttrEntity;
 import java.util.Map;
 
 /**
- * ??Ʒ?
+ * 商品属性
  *
  * @author tkn
  * @email lzlj21@163.com
- * @date 2022-09-07 13:52:45
+ * @date 2022-09-08 15:09:52
  */
 public interface AttrService extends IService<AttrEntity> {
 

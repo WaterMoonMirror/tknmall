@@ -1,6 +1,7 @@
 package name.tkn.tknmall.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,11 @@ import name.tkn.common.utils.R;
 
 
 /**
- * ??Ʒ???????
+ * 商品三级分类
  *
  * @author tkn
  * @email lzlj21@163.com
- * @date 2022-09-07 13:52:45
+ * @date 2022-09-08 15:09:52
  */
 @RestController
 @RequestMapping("product/category")
@@ -33,12 +34,21 @@ public class CategoryController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+   /* @RequestMapping("/list")
     //@RequiresPermissions("product:category:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = categoryService.queryPage(params);
 
         return R.ok().put("page", page);
+    }*/
+
+    /**
+     * 树形列表
+     */
+    @RequestMapping("/list/tree")
+    public R list(){
+        List<CategoryEntity> entities = categoryService.listWithTree();
+        return R.ok().put("data", entities);
     }
 
 
@@ -61,6 +71,15 @@ public class CategoryController {
     public R save(@RequestBody CategoryEntity category){
 		categoryService.save(category);
 
+        return R.ok();
+    }
+
+    /**
+     * 批量修改层级
+     */
+    @RequestMapping("/update/sort")
+    public R updateSort(@RequestBody CategoryEntity[] category){
+        categoryService.updateBatchById(Arrays.asList(category));
         return R.ok();
     }
 

@@ -15,5 +15,6 @@
         <module>tknmall-common</module>
         <module>renren-fast</module>
         <module>renren-generator</module>
+        <module>tknmall-gateway</module>
     </modules>
 </project>

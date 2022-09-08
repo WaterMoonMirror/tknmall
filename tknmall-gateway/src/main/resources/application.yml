@@ -1,0 +1,93 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.133.128:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8333
+        port: 8719
+    gateway:
+      routes:
+        - id: test_route
+          uri: http://www.baidu.com
+          predicates:
+            - Query=url,baidu
+        - id: qq_route
+          uri: http://www.qq.com
+          predicates:
+            - Query=url,qq
+
+        - id: product_route
+          uri: lb://tknmall-product
+          predicates:
+            - Path=/api/product/**,/hello
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+        - id: coupon_route
+          uri: lb://tknmall-coupon
+          predicates:
+            - Path=/api/coupon/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+        - id: member_route
+          uri: lb://tknmall-member
+          predicates:
+            - Path=/api/member/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+        - id: ware_route
+          uri: lb://tknmall-ware
+          predicates:
+            - Path=/api/ware/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+        #  OSS签名的转发
+        - id: third-server_route
+          uri: lb://tknmall-third-server
+          predicates:
+            - Path=/api/third/server/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+
+#过滤器要放最下面才不会被替换路径/api/*路径
+        - id: admin_route
+          uri: lb://tknmall-admin
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /renren-fast/$\{segment}
+        - id: tknmall_search_route
+          uri: lb://tknmall-search
+          predicates:
+            - Host=search.tknmall.com
+        - id: tknmall_auth_route
+          uri: lb://tknmall-auth-server
+          predicates:
+            - Host=auth.tknmall.com
+        - id: tknmall_seckill_route
+          uri: lb://tknmall-seckill
+          predicates:
+            - Host=seckill.tknmall.com
+        - id: tknmall_cart_route
+          uri: lb://tknmall-cart
+          predicates:
+            - Host=cart.tknmall.com
+        - id: tknmall_member_route
+          uri: lb://tknmall-member
+          predicates:
+            - Host=member.tknmall.com
+        - id: tknmall_order_route
+          uri: lb://tknmall-order
+          predicates:
+            - Host=order.tknmall.com
+        # 任何以tknmall.com结尾的域名转发到tknmall-product
+        # 注意！！！Nginx代理给网关的时候，会丢失请求Host
+        - id: tknmall_host_route
+          uri: lb://tknmall-product
+          predicates:
+            - Host=**.tknmall.com,tknmall.com,item.tknmall.com
+  application:
+    name: tknmall-gateway
+server:
+  port: 88

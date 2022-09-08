@@ -18,11 +18,11 @@ import name.tkn.common.utils.R;
 
 
 /**
- * sku????????&ֵ
+ * sku销售属性&值
  *
  * @author tkn
  * @email lzlj21@163.com
- * @date 2022-09-07 13:52:45
+ * @date 2022-09-08 15:09:52
  */
 @RestController
 @RequestMapping("product/skusaleattrvalue")
